@@ -7,6 +7,12 @@ Meta.MinAMPVersion=2.4.6.6
 Meta.DockerRequired=False
 Meta.ContainerPolicy=Supported
 
+Meta.ContainerPolicyReason=
+Meta.Prerequsites=[]
+Meta.EndpointURIFormat=steam://connect/{ip}:{GenericModule.App.Ports.$SteamQueryPort}
+Meta.AppConfigId=e1bfa71f-b54b-40ff-9c10-a1bff28b5000
+
+Meta.SpecificDockerImage=cubecoders/ampbase:wine
 Meta.OS=2
 Meta.ConfigManifest=aloftconfig.json
 Meta.MetaConfigManifest=aloftmetaconfig.json
