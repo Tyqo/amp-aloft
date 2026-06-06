@@ -6,7 +6,6 @@
         "UpdateSourceData": "1660080",
         "UpdateSourceArgs": "1660080",
         "UnzipUpdateSource": false,
-        "UpdateSourceVersion": "{{releasestream}}",
         "OverwriteExistingFiles": false,
         "DeleteAfterExtract": true,
         "SteamLogin": "{{SteamUsername}}",
