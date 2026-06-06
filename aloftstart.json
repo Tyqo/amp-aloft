@@ -1,19 +1,10 @@
 [
     {
-        "UpdateStageName": "Run MySQL Server",
+        "UpdateStageName": "Echo Debug",
         "UpdateSourcePlatform": "Linux",
         "UpdateSource": "Executable",
         "UpdateSourceData": "/bin/bash",
-        "UpdateSourceArgs": "-c \"cd mysql && mysql/bin/mysqladmin --socket=\\\"{{$FullBaseDir}}run/mysqld/mysqld.sock\\\" ping >/dev/null 2>&1 && exit 0 || { rm -f run/*.sock.lock; AdminAddress=\\\"{{admin_address}}\\\"; if [[ -n \\\"$AdminAddress\\\" ]]; then AdminSetting=\\\"--admin-address=$AdminAddress \\\"; else AdminSetting=\\\"\\\"; fi; mysql/bin/mysqld --defaults-file=\\\"{{$FullBaseDir}}my.cnf\\\" --port={{$ServerPort}} --mysqlx-port={{$ServerXPort}} --admin-port={{$AdminPort}} --basedir=\\\"{{$FullBaseDir}}mysql\\\" --datadir=\\\"{{$FullBaseDir}}data\\\" --pid-file=\\\"{{$FullBaseDir}}run/mysqld/mysqld.pid\\\" --socket=\\\"{{$FullBaseDir}}run/mysqld/mysqld.sock\\\" --mysqlx-socket=\\\"{{$FullBaseDir}}run/mysqld/mysqlx.sock\\\" --bind-address={{$ApplicationIPBinding}} --mysqlx-bind-address={{$ApplicationIPBinding}} $AdminSetting--plugin-load-add=auth_socket.so --general-log-file=\\\"{{$FullBaseDir}}log/mysql/mysql.log\\\" --wait-timeout=28800 --upgrade=FORCE & }\"",
-        "RunInBackground": true,
-        "SkipOnFailure": false
-    },
-    {
-        "UpdateStageName": "Set Up MySQL",
-        "UpdateSourcePlatform": "Linux",
-        "UpdateSource": "Executable",
-        "UpdateSourceData": "/bin/bash",
-        "UpdateSourceArgs": "-c \"cd mysql && timeout=60; while ((timeout--)); do mysql/bin/mysqladmin --socket=\\\"{{$FullBaseDir}}run/mysqld/mysqld.sock\\\" ping >/dev/null 2>&1 && break || sleep 1; done; ((timeout<0)) && { echo \\\"MySQL server failed to start. Aborting\\\"; exit 1; }; if mysql/bin/mysqladmin --socket=\\\"{{$FullBaseDir}}run/mysqld/mysqld.sock\\\" --user=root --password=\\\"\\\" ping >/dev/null 2>&1; then mysql/bin/mysql --socket=\\\"{{$FullBaseDir}}run/mysqld/mysqld.sock\\\" --user=root --password=\\\"\\\" -e \\\"FLUSH PRIVILEGES; ALTER USER 'root'@'localhost' IDENTIFIED WITH auth_socket; CREATE USER IF NOT EXISTS 'amp'@'localhost' IDENTIFIED WITH auth_socket; GRANT ALL PRIVILEGES ON *.* TO 'amp'@'localhost' WITH GRANT OPTION; FLUSH PRIVILEGES\\\"; fi; mysql/bin/mysql --protocol=socket --socket=\\\"{{$FullBaseDir}}run/mysqld/mysqld.sock\\\" --user=amp -e \\\"FLUSH PRIVILEGES; DELETE FROM mysql.user WHERE User=''; DROP DATABASE IF EXISTS test; DELETE FROM mysql.db WHERE Db='test' OR Db='test\\\\_%'; FLUSH PRIVILEGES\\\"\"",
+        "UpdateSourceArgs": "-c \" echo HelloAloftWorld \"",
         "SkipOnFailure": false
     }
 ]
