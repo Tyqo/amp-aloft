@@ -17,6 +17,19 @@
         "EnumValues": {}
     },
     {
+      "DisplayName": "Max Players",
+      "Category": "Server Settings",
+      "Description": "Maximum players",
+      "Keywords": "players,max",
+      "FieldName": "MAXPLAYERS",
+      "InputType": "number",
+      "DefaultValue": "2",
+      "Placeholder": "2",
+      "Hidden": false,
+      "SkipIfEmpty": false,
+      "EnumValues": {}
+    },
+    {
         "DisplayName": "Number of Islands",
         "Category": "Server Settings",
         "Description": "Number of Islands you want (250 to 500)",
