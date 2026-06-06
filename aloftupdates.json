@@ -1,9 +1,15 @@
 [
-  {
-    "UpdateStageName": "Steam Download",
-    "UpdateSource": "SteamCMD",
-    "AppID": "1660080",
-    "SteamBranch": "public",
-    "SteamLogin": "{{SteamUsername}}"
-  }
+    {
+        "UpdateStageName": "SteamCMD Download",
+        "UpdateSourcePlatform": "All",
+        "UpdateSource": "SteamCMD",
+        "UpdateSourceData": "1660080",
+        "UpdateSourceArgs": "1660080",
+        "UnzipUpdateSource": false,
+        "UpdateSourceVersion": "{{releasestream}}",
+        "OverwriteExistingFiles": false,
+        "DeleteAfterExtract": true,
+        "SteamLogin": "{{SteamUsername}}",
+        "OneShot": false
+    }
 ]
