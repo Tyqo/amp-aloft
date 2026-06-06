@@ -28,13 +28,13 @@ App.HasWritableConsole=true
 App.RootDir=./Aloft/
 App.BaseDirectory=./Aloft/
 App.WorkingDir=.
-App.ExecutableLinux=steam
+App.ExecutableLinux=./start.sh
 
-App.CommandLineArgs=-applaunch 1660080 -batchmode -nographics -server load#{{MAPNAME}}# log#{{LOG}}# disablevideo#true# servername#{{SERVERNAME}}# isvisible#{{VISIBLE}}# playercount#{{MAXPLAYERS}}# serverport#{{PORT}}#
+App.CommandLineArgs=
 
 App.WindowsCommandLineArgs=
 
-App.ApplicationReadyMode=ConsoleRegex
+App.ApplicationReadyMode=Immediate
 Console.AppReadyRegex=.*Room Code.*
 Console.UserJoinRegex=^$
 Console.UserLeaveRegex=^$
