@@ -1,12 +1,1 @@
-{
-  "Version": "1.0",
-  "Name": "Aloft",
-  "Description": "Aloft Dedicated Server",
-  "Author": "Tyqo",
-  "URL": "https://store.steampowered.com/app/1660080/Aloft/",
-  "MinAMPVersion": "2.4.6.6",
-  "SupportsDocker": false,
-  "SupportedOS": [
-    "Linux"
-  ]
-}
+[]
