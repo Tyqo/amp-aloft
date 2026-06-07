@@ -1,10 +1,14 @@
 [
-	{
-        "UpdateStageName": "SteamCMD Download",
+    {
+        "UpdateStageName": "Steam-Download-und-Validierung",
         "UpdateSourcePlatform": "All",
         "UpdateSource": "SteamCMD",
         "UpdateSourceData": "1660080",
-        "UpdateSourceVersion": "{{releasestream}}",
-        "SkipOnFailure": false
+        "UpdateSourceArgs": "1660080",
+        "UnzipUpdateSource": false,
+        "OverwriteExistingFiles": true,
+        "ForceDownloadPlatform": "Windows",
+        "DeleteAfterExtract": true,
+        "OneShot": false
     }
 ]
