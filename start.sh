@@ -11,3 +11,5 @@ log#ERROR# \
 disablevideo#true#
 
 sleep 600
+
+## https://eggs.pterodactyl.io/egg/games-aloft
