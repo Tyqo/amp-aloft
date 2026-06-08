@@ -35,7 +35,6 @@ echo " ███████║██║     ██║   ██║████�
 echo " ██╔══██║██║     ██║   ██║██╔══╝     ██║   "
 echo " ██║  ██║███████╗╚██████╔╝██║        ██║   "
 echo " ╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═╝        ╚═╝   "
-echo " Dedicated Server Setup for Proxmox LXC"
 echo -e "${NC}"
 
 
@@ -82,6 +81,7 @@ GAME_DIR="/AMP/aloft/1660080"
 WINE_PREFIX_DIR="/AMP/aloft/.wine"
 WINE_SAVE_DIR="$WINE_PREFIX_DIR/drive_c/users/amp/AppData/LocalLow/Astrolabe Interactive/Aloft/Data06"
 SAVE_PATH="$WINE_SAVE_DIR/Saves/w_$MAP_NAME/"
+ROOM_CODE_FILE="$GAME_DIR/ServerRoomCode.txt"
 
 # ==========================================
 # ENVIRONMENT VARIABLES & WINE CONFIG
@@ -96,6 +96,8 @@ export FORCE_AUDIO_VDMA=1
 export USER=$GAME_USER
 export USERNAME=$GAME_USER
 
+# Ensure any stale, previous room codes are cleared before launching
+rm -f "$ROOM_CODE_FILE"
 
 # Initialize Wine prefix if it doesn't exist
 if [ ! -d "$WINEPREFIX" ]; then
@@ -109,11 +111,11 @@ fi
 # VIRTUAL DISPLAY SETUP (Crucial for Unity)
 # ==========================================
 if ! pgrep -x "Xvfb" > /dev/null; then
-    echo "Starting virtual frame buffer (Xvfb) on :99..."
-    Xvfb :99 -screen 0 1024x768x16 &
+    echo "Starting virtual frame buffer (Xvfb) on :1..."
+    Xvfb :1 -screen 0 1024x768x16 &
     sleep 2
 fi
-export DISPLAY=:99
+export DISPLAY=:1
 
 # ==========================================
 # WORLD CHECK & LAUNCH ARGUMENTS
@@ -125,15 +127,32 @@ cd "$GAME_DIR" || { echo "Error: Game directory not found."; exit 1; }
 if [ ! -d "$WINE_SAVE_DIR" ]; then
     echo "setting up symlink"
     mkdir -p "$WINE_SAVE_DIR"
-    mkdir -p "$GAME_DIR/Data06/"
 
     echo "$WINE_SAVE_DIR"
     echo "$GAME_DIR/Data06/"
 
-    ln -s "$WINE_SAVE_DIR" "$GAME_DIR/Data06/"
+    ln -s "$WINE_SAVE_DIR/" "$GAME_DIR/Data06"
 else
     echo "Symlink is set"
 fi
+
+# ==========================================
+# BACKGROUND ROOM CODE MONITOR (AMP CONSOLE HOOK)
+# ==========================================
+# This loops safely in the background waiting for Aloft to write the join key
+(
+    # Timeout after 3 minutes just in case the server crashes or stalls
+    for i in {1..36}; do
+        if [ -f "$ROOM_CODE_FILE" ] && [ -s "$ROOM_CODE_FILE" ]; then
+            ROOM_CODE=$(cat "$ROOM_CODE_FILE")
+            echo "========================================================="
+            echo "   [ALOFT JOIN CODE]: $ROOM_CODE"
+            echo "========================================================="
+            break
+        fi
+        sleep 5
+    done
+) &
 
 # ==========================================
 # RUNNING THE SERVER
@@ -146,10 +165,11 @@ if [ ! -d "$SAVE_PATH" ]; then
     echo "World file not found at: $SAVE_PATH"
     echo "Initializing NEW world creation configuration..."
     CREATE_ARGS="-batchmode -nographics -server  create#${MAP_NAME}# islandcount#${ISLAND_COUNT}# corruptioncount#normal# creative#${GAME_MODE}# log#ERROR# disablevideo#true#"
-    wine "$EXE_NAME" $CREATE_ARGS
+    wine "$EXE_NAME" $CREATE_ARGS 2>/dev/null
+    echo "Initializing NEW world creation configuration..."
 fi
 
-echo "Existing world found. Setting server to LOAD mode."
+echo "World $MAP_NAME found. Setting server to LOAD mode."
 LAUNCH_ARGS="-batchmode -nographics \
         -server load#${MAP_NAME}# servername#${SERVER_NAME}# isvisible#${IS_VISIBLE}# playercount#${PLAYER_COUNT}# serverport#${SERVER_PORT}# admin#-1# admin#-2# log#ERROR# disablevideo#true#"
-wine "$EXE_NAME" $LAUNCH_ARGS
+wine "$EXE_NAME" $LAUNCH_ARGS 2>/dev/null
