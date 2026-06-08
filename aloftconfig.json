@@ -1,16 +1,16 @@
 [
-    {
-    "DisplayName": "Servername",
-    "FieldName": "Servername",
-    "ParamFieldName": "servername",
-    "IncludeInCommandLine": true,
-    "IsFlagArgument": false
-},
-{
-    "DisplayName": "Standard-Weltname",
-    "FieldName": "Standard-Weltname",
-    "ParamFieldName": "mapname",
-    "IncludeInCommandLine": true,
-    "IsFlagArgument": false
-}
+	{
+		"DisplayName": "Servername",
+		"FieldName": "Servername",
+		"ParamFieldName": "servername",
+		"IncludeInCommandLine": true,
+		"IsFlagArgument": false
+	},
+	{
+		"DisplayName": "Standard-Weltname",
+		"FieldName": "Standard-Weltname",
+		"ParamFieldName": "mapname",
+		"IncludeInCommandLine": true,
+		"IsFlagArgument": false
+	}
 ]
