@@ -101,6 +101,17 @@ export USER=$GAME_USER
 export USERNAME=$GAME_USER
 
 
+echo "=========="
+echo $whoami
+echo $pwd
+echo $GAME_DIR
+echo $SAVE_PATH
+echo $WINE_SAVE_DIR
+echo $SERVER_PORT
+echo "=========="
+
+exit
+
 # Initialize Wine prefix if it doesn't exist
 if [ ! -d "$WINEPREFIX" ]; then
     echo "Creating isolated 64-bit Wine prefix..."
@@ -123,15 +134,6 @@ export DISPLAY=:99
 # WORLD CHECK & LAUNCH ARGUMENTS
 # ==========================================
 cd "$GAME_DIR" || { echo "Error: Game directory not found."; exit 1; }
-
-echo "=========="
-echo $whoami
-echo $pwd
-echo $GAME_DIR
-echo $SAVE_PATH
-echo $WINE_SAVE_DIR
-echo $SERVER_PORT
-echo "=========="
 
 # Target path where Aloft saves worlds inside the Wine prefix environment
 # Note: Wine maps the Windows AppData path to your user profile directory
