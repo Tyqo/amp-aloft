@@ -18,7 +18,8 @@ App.HasWritableConsole=true
 App.DisplayName=Aloft
 
 # AMP passes arguments down into our execution script wrapper instead of directly to wine
-App.CommandLineArgs={{$FormattedArgs}}
+App.CommandLineArgs=
+# App.CommandLineArgs={{$FormattedArgs}}
 App.CommandLineParameterFormat=--{0} "{1}"
 App.CommandLineParameterDelimiter=
 
