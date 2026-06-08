@@ -10,5 +10,13 @@
         "ForceDownloadPlatform": "Windows",
         "DeleteAfterExtract": true,
         "OneShot": false
+    },
+    {
+        "UpdateStageName": "Set Execution Flag on Wrapper Script",
+        "UpdateSourcePlatform": "Linux",
+        "UpdateSource": "Executable",
+        "UpdateSourceData": "/bin/chmod",
+        "UpdateSourceArgs": "+x {{$FullRootDir}}start_aloft.sh",
+        "OneShot": false
     }
 ]

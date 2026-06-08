@@ -9,39 +9,44 @@ Meta.DockerRequired=False
 Meta.ContainerPolicy=Supported
 Meta.DisplayImageSource=steam:1660080
 Meta.OS=3
-Meta.EndpointURIFormat=steam://connect/{ip}:{GenericModule.App.Ports.$SteamQueryPort}
+Meta.EndpointURIFormat=steam://connect/{ip}:{GenericModule.App.Ports.$GamePort}
 Meta.AppConfigId=255bfffe-3488-4022-8db8-60d1e2a47c2e
 
 App.AdminMethod=PinballWizard
 App.HasReadableConsole=true
 App.HasWritableConsole=true
 App.DisplayName=Aloft
-App.CommandLineArgs={{$PlatformArgs}} {{$FormattedArgs}}
-App.CommandLineParameterFormat=-{0} "{1}"
+
+# AMP passes arguments down into our execution script wrapper instead of directly to wine
+App.CommandLineArgs={{$FormattedArgs}}
+App.CommandLineParameterFormat=--{0} "{1}"
 App.CommandLineParameterDelimiter=
+
 App.ExitMethod=OS_CLOSE
 App.ExitString=stop
 App.ExitTimeout=30
 App.ExitFile=app_exit.lck
 App.ApplicationIPBinding=0.0.0.0
 
-# Steam Login Konfiguration
+# Steam Login Configuration
 App.SteamUpdateAnonymousLogin=False
 App.SteamForceLoginPrompt=True
 
 App.RootDir=./aloft/
 App.BaseDirectory=./aloft/1660080/
 App.WorkingDir=1660080
-App.ExecutableWin=1660080\Aloft.exe
-App.ExecutableLinux=/usr/bin/wine
-App.LinuxCommandLineArgs="Aloft.exe -batchmode -nographics -server create#LinuxWorld# islandcount#normal# corruptioncount#normal# creative#false# log#ERROR# disablevideo#true# -logFile ./AloftServer.log"
 
-# Referenzierte Dateien
+# Direct entrypoint configuration pointing to our automated wrapper script
+App.ExecutableWin=
+App.ExecutableLinux=/bin/bash
+App.LinuxCommandLineArgs="../start_aloft.sh {{$FormattedArgs}} --port {{$Ports.GamePort}}"
+
+# Referenced Files
 App.Ports=@IncludeJson[aloftports.json]
 App.UpdateSources=@IncludeJson[aloftupdates.json]
 
-# Umgebungsvariablen für Wine
-App.EnvironmentVariables={"LD_LIBRARY_PATH": "{{$FullBaseDir}}linux64:{{$FullRootDir}}linux64:%LD_LIBRARY_PATH%", "SteamAppId": "1660080", "WINEPREFIX": "{{$FullRootDir}}.wine", "WINEARCH": "win64", "WINEDEBUG": "-all", "DISPLAY": ":0"}
+# Environment Variables mapping down to the Docker container setup
+App.EnvironmentVariables={"LD_LIBRARY_PATH": "{{$FullBaseDir}}linux64:{{$FullRootDir}}linux64:%LD_LIBRARY_PATH%", "SteamAppId": "1660080", "WINEPREFIX": "{{$FullRootDir}}.wine", "WINEARCH": "win64", "WINEDEBUG": "-all,fixme-all", "DISPLAY": ":1", "UNITY_DISABLE_GRAPHICS": "1", "FORCE_AUDIO_VDMA": "1", "USER": "amp", "USERNAME": "amp", "LOGNAME": "amp"}
 
 Meta.ConfigManifest=aloftconfig.json
 Meta.MetaConfigManifest=aloftmetaconfig.json
