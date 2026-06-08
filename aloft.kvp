@@ -12,7 +12,7 @@ Meta.OS=3
 Meta.EndpointURIFormat=steam://connect/{ip}:{GenericModule.App.Ports.$GamePort}
 Meta.AppConfigId=255bfffe-3488-4022-8db8-60d1e2a47c2e
 
-App.AdminMethod=PinballWizard
+App.AdminMethod=STDIO
 App.HasReadableConsole=true
 App.HasWritableConsole=true
 App.DisplayName=Aloft
@@ -23,9 +23,9 @@ App.CommandLineArgs=
 App.CommandLineParameterFormat=--{0} "{1}"
 App.CommandLineParameterDelimiter=
 
-App.ExitMethod=OS_CLOSE
+App.ExitMethod=SIGINT
 App.ExitString=stop
-App.ExitTimeout=30
+App.ExitTimeout=8
 App.ExitFile=app_exit.lck
 App.ApplicationIPBinding=0.0.0.0
 

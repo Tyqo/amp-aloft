@@ -165,11 +165,11 @@ if [ ! -d "$SAVE_PATH" ]; then
     echo "World file not found at: $SAVE_PATH"
     echo "Initializing NEW world creation configuration..."
     CREATE_ARGS="-batchmode -nographics -server  create#${MAP_NAME}# islandcount#${ISLAND_COUNT}# corruptioncount#normal# creative#${GAME_MODE}# log#ERROR# disablevideo#true#"
-    wine "$EXE_NAME" $CREATE_ARGS 2>/dev/null
+    wine "$EXE_NAME" $CREATE_ARGS &>/dev/null
     echo "Initializing NEW world creation configuration..."
 fi
 
 echo "World $MAP_NAME found. Setting server to LOAD mode."
 LAUNCH_ARGS="-batchmode -nographics \
         -server load#${MAP_NAME}# servername#${SERVER_NAME}# isvisible#${IS_VISIBLE}# playercount#${PLAYER_COUNT}# serverport#${SERVER_PORT}# admin#-1# admin#-2# log#ERROR# disablevideo#true#"
-wine "$EXE_NAME" $LAUNCH_ARGS 2>/dev/null
+wine "$EXE_NAME" $LAUNCH_ARGS &>/dev/null
