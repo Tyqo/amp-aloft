@@ -12,12 +12,14 @@
 		"OneShot": false
 	},
 	{
-		"UpdateStageName": "Copy Wrapper Script From Template",
+		"UpdateStageName": "Copy Wrapper Script",
 		"UpdateSourcePlatform": "Linux",
-		"UpdateSource": "Executable",
-		"UpdateSourceData": "/bin/cp",
-		"UpdateSourceArgs": "{{$TemplateDir}}start_aloft.sh {{$FullRootDir}}start_aloft.sh",
-		"OneShot": false
+		"UpdateSource": "FetchURL",
+		"UpdateSourceData": "https://raw.githubusercontent.com/Tyqo/amp-aloft/refs/heads/main/start_aloft.sh",
+		"UpdateSourceArgs": "start_aloft.sh",
+		"UpdateSourceTarget": "{{$FullRootDir}}start_aloft.sh",
+		"OverwriteExistingFiles": false,
+		"SkipOnFailure": false
 	},
 	{
 		"UpdateStageName": "Set Execution Flag on Wrapper Script",
