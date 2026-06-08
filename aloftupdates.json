@@ -12,19 +12,11 @@
 		"OneShot": false
 	},
 	{
-		"UpdateStageName": "Copy Wrapper Script From Template",
+		"UpdateStageName": "Deploy-Wrapper-Script",
 		"UpdateSourcePlatform": "Linux",
-		"UpdateSource": "Executable",
-		"UpdateSourceData": "/bin/cp",
-		"UpdateSourceArgs": "{{$TemplateDir}}start_aloft.sh {{$FullRootDir}}start_aloft.sh",
-		"OneShot": false
-	},
-	{
-		"UpdateStageName": "Set Execution Flag on Wrapper Script",
-		"UpdateSourcePlatform": "Linux",
-		"UpdateSource": "Executable",
-		"UpdateSourceData": "/bin/chmod",
-		"UpdateSourceArgs": "+x {{$FullRootDir}}start_aloft.sh",
+		"UpdateSource": "Action",
+		"UpdateSourceData": "Overlay",
+		"UpdateSourceArgs": "start_aloft.sh",
 		"OneShot": false
 	}
 ]
