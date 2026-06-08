@@ -130,6 +130,7 @@ echo $pwd
 echo $GAME_DIR
 echo $SAVE_PATH
 echo $WINE_SAVE_DIR
+echo $SERVER_PORT
 echo "=========="
 
 # Target path where Aloft saves worlds inside the Wine prefix environment
