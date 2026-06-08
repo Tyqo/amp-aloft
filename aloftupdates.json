@@ -1,21 +1,9 @@
 [
 	{
-		"UpdateStageName": "Steam-Download",
-		"UpdateSourcePlatform": "All",
-		"UpdateSource": "SteamCMD",
-		"UpdateSourceData": "1660080",
-		"UpdateSourceArgs": "1660080",
-		"UnzipUpdateSource": false,
-		"OverwriteExistingFiles": true,
-		"ForceDownloadPlatform": "Windows",
-		"DeleteAfterExtract": true,
-		"OneShot": false
-	},
-	{
 		"UpdateStageName": "Copy Wrapper Script",
 		"UpdateSourcePlatform": "Linux",
 		"UpdateSource": "FetchURL",
-		"UpdateSourceData": "https://raw.githubusercontent.com/Tyqo/amp-aloft/refs/heads/main/start_aloft.sh",
+		"UpdateSourceData": "https://raw.githubusercontent.com/Tyqo/amp-aloft/main/start_aloft.sh",
 		"UpdateSourceArgs": "start_aloft.sh",
 		"UpdateSourceTarget": "{{$FullRootDir}}start_aloft.sh",
 		"OverwriteExistingFiles": false,
