@@ -42,12 +42,7 @@ echo -e "${NC}"
 # ==========================================
 # CONFIGURATION
 # ==========================================
-# GAME_DIR="/AMP/aloft/1660080/"
-# EXE_NAME="Aloft.exe" # Change to the exact case-sensitive .exe name if needed
-# GAME_USER="amp"
-
 # Wine Environment Settings
-# WINE_PREFIX_DIR="/AMP/aloft/.wine"
 WINE_ARCH="win64"
 
 # Aloft Game Server Settings
@@ -82,10 +77,11 @@ SERVER_NAME=$(echo "$SERVER_NAME" | tr -d ' ')
 MAP_NAME=$(echo "$MAP_NAME" | tr -d ' ')
 
 # Directories Context
+EXE_NAME="Aloft.exe"
 GAME_DIR="/AMP/aloft/1660080"
 WINE_PREFIX_DIR="/AMP/aloft/.wine"
-WINE_SAVE_DIR="$WINE_PREFIX_DIR/drive_c/users/amp/AppData/LocalLow/Astrolabe Interactive/Aloft/Data06/Saves"
-SAVE_PATH="$WINE_SAVE_DIR/w_$MAP_NAME/"
+WINE_SAVE_DIR="$WINE_PREFIX_DIR/drive_c/users/amp/AppData/LocalLow/Astrolabe Interactive/Aloft/Data06"
+SAVE_PATH="$WINE_SAVE_DIR/Saves/w_$MAP_NAME/"
 
 # ==========================================
 # ENVIRONMENT VARIABLES & WINE CONFIG
@@ -129,12 +125,12 @@ cd "$GAME_DIR" || { echo "Error: Game directory not found."; exit 1; }
 if [ ! -d "$WINE_SAVE_DIR" ]; then
     echo "setting up symlink"
     mkdir -p "$WINE_SAVE_DIR"
-    mkdir -p "$GAME_DIR/Data06/Saves"
+    mkdir -p "$GAME_DIR/Data06/"
 
     echo "$WINE_SAVE_DIR"
-    echo "$GAME_DIR/Data06/Saves"
+    echo "$GAME_DIR/Data06/"
 
-    ln -s "$WINE_SAVE_DIR" "$GAME_DIR/Data06/Saves"
+    ln -s "$WINE_SAVE_DIR" "$GAME_DIR/Data06/"
 else
     echo "Symlink is set"
 fi
