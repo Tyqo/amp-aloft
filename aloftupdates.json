@@ -1,6 +1,6 @@
 [
 	{
-		"UpdateStageName": "Steam-Download-und-Validierung",
+		"UpdateStageName": "Steam-Download",
 		"UpdateSourcePlatform": "All",
 		"UpdateSource": "SteamCMD",
 		"UpdateSourceData": "1660080",
