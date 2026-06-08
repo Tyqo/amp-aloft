@@ -4,8 +4,7 @@
 		"UpdateSourcePlatform": "Linux",
 		"UpdateSource": "FetchURL",
 		"UpdateSourceData": "https://raw.githubusercontent.com/Tyqo/amp-aloft/main/start_aloft.sh",
-		"UpdateSourceArgs": "start_aloft.sh",
-		"UpdateSourceTarget": "{{$FullRootDir}}start_aloft.sh",
+		"UpdateSourceArgs": "{{$FullRootDir}}start_aloft.sh",
 		"OverwriteExistingFiles": false,
 		"SkipOnFailure": false
 	},
