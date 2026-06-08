@@ -51,8 +51,8 @@ echo -e "${NC}"
 WINE_ARCH="win64"
 
 # Aloft Game Server Settings
-MAP_NAME="Narnia"
-SERVER_NAME="Aloft_Server"
+MAP_NAME="AloftWorld"
+SERVER_NAME="AloftServer"
 PLAYER_COUNT="8"
 IS_VISIBLE="true" # "true" for public server browser, "false" for private
 SERVER_PORT="0"
@@ -100,17 +100,6 @@ export FORCE_AUDIO_VDMA=1
 export USER=$GAME_USER
 export USERNAME=$GAME_USER
 
-
-echo "=========="
-echo $whoami
-echo $pwd
-echo $GAME_DIR
-echo $SAVE_PATH
-echo $WINE_SAVE_DIR
-echo $SERVER_PORT
-echo "=========="
-
-exit
 
 # Initialize Wine prefix if it doesn't exist
 if [ ! -d "$WINEPREFIX" ]; then
