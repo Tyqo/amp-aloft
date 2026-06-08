@@ -1,22 +1,30 @@
 [
-    {
-        "UpdateStageName": "Steam-Download-und-Validierung",
-        "UpdateSourcePlatform": "All",
-        "UpdateSource": "SteamCMD",
-        "UpdateSourceData": "1660080",
-        "UpdateSourceArgs": "1660080",
-        "UnzipUpdateSource": false,
-        "OverwriteExistingFiles": true,
-        "ForceDownloadPlatform": "Windows",
-        "DeleteAfterExtract": true,
-        "OneShot": false
-    },
-    {
-        "UpdateStageName": "Set Execution Flag on Wrapper Script",
-        "UpdateSourcePlatform": "Linux",
-        "UpdateSource": "Executable",
-        "UpdateSourceData": "/bin/chmod",
-        "UpdateSourceArgs": "+x {{$FullRootDir}}start_aloft.sh",
-        "OneShot": false
-    }
+	{
+		"UpdateStageName": "Steam-Download-und-Validierung",
+		"UpdateSourcePlatform": "All",
+		"UpdateSource": "SteamCMD",
+		"UpdateSourceData": "1660080",
+		"UpdateSourceArgs": "1660080",
+		"UnzipUpdateSource": false,
+		"OverwriteExistingFiles": true,
+		"ForceDownloadPlatform": "Windows",
+		"DeleteAfterExtract": true,
+		"OneShot": false
+	},
+	{
+		"UpdateStageName": "Copy Wrapper Script From Template",
+		"UpdateSourcePlatform": "Linux",
+		"UpdateSource": "Executable",
+		"UpdateSourceData": "/bin/cp",
+		"UpdateSourceArgs": "{{$TemplateDir}}start_aloft.sh {{$FullRootDir}}start_aloft.sh",
+		"OneShot": false
+	},
+	{
+		"UpdateStageName": "Set Execution Flag on Wrapper Script",
+		"UpdateSourcePlatform": "Linux",
+		"UpdateSource": "Executable",
+		"UpdateSourceData": "/bin/chmod",
+		"UpdateSourceArgs": "+x {{$FullRootDir}}start_aloft.sh",
+		"OneShot": false
+	}
 ]

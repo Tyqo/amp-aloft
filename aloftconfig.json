@@ -99,7 +99,7 @@
         "InputType": "number",
         "IsFlagArgument": false,
         "ParamFieldName": "port",
-        "IncludeInCommandLine": true,
+        "IncludeInCommandLine": false,
         "DefaultValue": "0",
         "Placeholder": "0",
         "Suffix": "",
