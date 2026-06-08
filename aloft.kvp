@@ -38,8 +38,8 @@ App.WorkingDir=1660080
 
 # Direct entrypoint configuration pointing to our automated wrapper script
 App.ExecutableWin=
-App.ExecutableLinux=/bin/bash
-App.LinuxCommandLineArgs="{{$FullRootDir}}start_aloft.sh {{$FormattedArgs}} --port {{$Ports.GamePort}}"
+App.ExecutableLinux={{$FullRootDir}}start_aloft.sh
+App.LinuxCommandLineArgs="{{$FormattedArgs}} --port {{$Ports.GamePort}}"
 
 # Referenced Files
 App.Ports=@IncludeJson[aloftports.json]
