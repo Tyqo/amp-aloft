@@ -55,18 +55,19 @@ SERVER_PORT="0"
 # Game Modes: 0 = Survival, 1 = Creative, 2 = Custom
 ISLAND_COUNT="300"
 GAME_MODE="0"
+LOAD_LOG="NONE"
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
-    	--servername) SERVER_NAME="$2"; shift ;;
-		--mapname) MAP_NAME="$2"; shift ;;
-		--islands) ISLAND_COUNT="$2"; shift ;;
-		--creative) GAME_MODE="$2"; shift ;;
-		--visible) IS_VISIBLE="$2"; shift ;;
-		--port) SERVER_PORT="$2"; shift ;;
-		--admin) ADMIN="$2"; shift ;;
-		--log) LOG_LEVEL="$2"; shift ;;
-		--playercount) PLAYER_COUNT="$2"; shift ;;
+        --servername) SERVER_NAME="$2"; shift ;;
+        --mapname) MAP_NAME="$2"; shift ;;
+        --islands) ISLAND_COUNT="$2"; shift ;;
+        --creative) GAME_MODE="$2"; shift ;;
+        --visible) IS_VISIBLE="$2"; shift ;;
+        --port) SERVER_PORT="$2"; shift ;;
+        --admin) ADMIN="$2"; shift ;;
+        --log) LOG_LEVEL="$2"; shift ;;
+        --playercount) PLAYER_COUNT="$2"; shift ;;
     esac
     shift
 done
@@ -84,6 +85,10 @@ SAVE_PATH="$WINE_SAVE_DIR/Saves/w_$MAP_NAME/"
 ROOM_CODE_FILE="$GAME_DIR/ServerRoomCode.txt"
 CREATE_LOG="$GAME_DIR/CreateServer.log"
 LOAD_LOG="$GAME_DIR/LoadServer.log"
+
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
 
 # ==========================================
 # ENVIRONMENT VARIABLES & WINE CONFIG
@@ -123,6 +128,8 @@ shutdown_handler() {
     exit 0
 }
 
+trap shutdown_handler SIGINT SIGTERM
+
 # Initialize Wine prefix if it doesn't exist
 if [ ! -d "$WINEPREFIX" ]; then
     echo "Creating isolated 64-bit Wine prefix..."
@@ -130,13 +137,13 @@ if [ ! -d "$WINEPREFIX" ]; then
 fi
 
 # Set Wine to Windows 10 mode silently via registry override
-wine reg add "HKCU\\Software\\Wine" /v Version /t REG_SZ /d "win10" /f
+# wine reg add "HKCU\\Software\\Wine" /v Version /t REG_SZ /d "win10" /f
 
 # ==========================================
 # VIRTUAL DISPLAY SETUP (Crucial for Unity)
 # ==========================================
 if ! pgrep -x "Xvfb" > /dev/null; then
-    echo "Starting virtual frame buffer (Xvfb) on :1..."
+    echo "Starting virtual frame buffer (Xvfb) on :99..."
     Xvfb :99 -screen 0 1024x768x16 &
     sleep 2
 fi
@@ -189,16 +196,19 @@ echo "-----------------------------------------------"
 if [ ! -d "$SAVE_PATH" ]; then
     echo "World file not found at: $SAVE_PATH"
     echo "Initializing NEW world creation configuration..."
-    CREATE_ARGS="-batchmode -nographics -server  create#${MAP_NAME}# islandcount#${ISLAND_COUNT}# corruptioncount#normal# creative#${GAME_MODE}# log#ERROR# disablevideo#true#"
+    CREATE_ARGS="-batchmode -nographics -server  create#${MAP_NAME}# islandcount#${ISLAND_COUNT}# corruptioncount#normal# creative#${GAME_MODE}# log#${LOG_LEVEL}# disablevideo#true#"
     wine "$EXE_NAME" $CREATE_ARGS &>$CREATE_LOG
     echo "Initializing NEW world creation configuration..."
 fi
 
 echo "World $MAP_NAME found. Setting server to LOAD mode."
+echo "This can take a minute..."
 LAUNCH_ARGS="-batchmode -nographics \
-        -server load#${MAP_NAME}# servername#${SERVER_NAME}# isvisible#${IS_VISIBLE}# playercount#${PLAYER_COUNT}# serverport#${SERVER_PORT}# admin#-1# admin#-2# log#ERROR# disablevideo#true#"
-wine "$EXE_NAME" $LAUNCH_ARGS 2>$LOAD_LOG &
+        -server load#${MAP_NAME}# servername#${SERVER_NAME}# isvisible#${IS_VISIBLE}# playercount#${PLAYER_COUNT}# serverport#${SERVER_PORT}# admin#-1# admin#-2# log#${LOG_LEVEL}# disablevideo#true#"
+# wine "$EXE_NAME" $LAUNCH_ARGS 2>$LOAD_LOG &
+# wine "$EXE_NAME" $LAUNCH_ARGS 2>/dev/null &
+wine "$EXE_NAME" $LAUNCH_ARGS > /dev/null 2>&1 #&
 
 # Store the Wine process ID and wait on it natively
-WINE_PID=$!
-wait $WINE_PID
+# WINE_PID=$!
+# wait $WINE_PID

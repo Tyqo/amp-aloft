@@ -17,6 +17,10 @@ App.HasReadableConsole=true
 App.HasWritableConsole=true
 App.DisplayName=Aloft
 
+Console.AppReadyRegex=.*Room Code.*
+Console.UserJoinRegex=^Player joined: (.*)$
+Console.UserLeaveRegex=^"Player left: (.*)"$
+
 # AMP passes arguments down into our execution script wrapper instead of directly to wine
 App.CommandLineArgs=
 # App.CommandLineArgs={{$FormattedArgs}}
