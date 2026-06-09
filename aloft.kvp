@@ -31,6 +31,7 @@ App.ExitString=stop
 App.ExitTimeout=8
 App.ExitFile=app_exit.lck
 App.ApplicationIPBinding=0.0.0.0
+App.MaxUsers=9
 
 # Steam Login Configuration
 App.SteamUpdateAnonymousLogin=False

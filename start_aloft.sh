@@ -57,6 +57,9 @@ ISLAND_COUNT="300"
 GAME_MODE="0"
 LOG_LEVEL="ERROR"
 
+echo "$#"
+echo "$1"
+
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         --servername) SERVER_NAME="$2"; shift ;;
@@ -85,6 +88,10 @@ SAVE_PATH="$WINE_SAVE_DIR/Saves/w_$MAP_NAME/"
 ROOM_CODE_FILE="$GAME_DIR/ServerRoomCode.txt"
 CREATE_LOG="$GAME_DIR/CreateServer.log"
 LOAD_LOG="$GAME_DIR/LoadServer.log"
+
+# Define an instance-safe local tmp directory
+LOCAL_TMP="$GAME_DIR/.tmp"
+mkdir -p "$LOCAL_TMP"
 
 export XDG_RUNTIME_DIR=/tmp/runtime-root
 mkdir -p "$XDG_RUNTIME_DIR"
@@ -123,6 +130,8 @@ shutdown_handler() {
     # wineserver -k sends a clean termination signal to all running exes in this prefix
     /usr/bin/wineserver -k
 
+    pkill -f "Xvfb :99" || true
+
     # Give Wine up to 5 seconds to flush save data to disk
     sleep 3
     exit 0
@@ -139,12 +148,16 @@ fi
 # Set Wine to Windows 10 mode silently via registry override
 # wine reg add "HKCU\\Software\\Wine" /v Version /t REG_SZ /d "win10" /f
 
+rm -f $LOCAL_TMP/.X99-lock
+rm -f $LOCAL_TMP/.X11-unix/X99
+
 # ==========================================
 # VIRTUAL DISPLAY SETUP (Crucial for Unity)
 # ==========================================
 if ! pgrep -x "Xvfb" > /dev/null; then
     echo "Starting virtual frame buffer (Xvfb) on :99..."
-    Xvfb :99 -screen 0 1024x768x16 &
+    # Xvfb :99 -screen 0 1024x768x16 &
+    Xvfb :99 -fbdir "$LOCAL_TMP" -screen 0 1024x768x16 -nolisten tcp &
     sleep 2
 fi
 export DISPLAY=:99
@@ -153,17 +166,6 @@ export DISPLAY=:99
 # WORLD CHECK & LAUNCH ARGUMENTS
 # ==========================================
 cd "$GAME_DIR" || { echo "Error: Game directory not found."; exit 1; }
-
-# Target path where Aloft saves worlds inside the Wine prefix environment
-# Note: Wine maps the Windows AppData path to your user profile directory
-if [ ! -d "$WINE_SAVE_DIR" ]; then
-    echo "setting up symlink"
-    mkdir -p "$WINE_SAVE_DIR"
-
-    ln -s "$WINE_SAVE_DIR" "Data06"
-else
-    echo "Symlink is set"
-fi
 
 # ==========================================
 # BACKGROUND ROOM CODE MONITOR (AMP CONSOLE HOOK)
@@ -201,14 +203,39 @@ if [ ! -d "$SAVE_PATH" ]; then
     sleep 5
 fi
 
+# Target path where Aloft saves worlds inside the Wine prefix environment
+# Note: Wine maps the Windows AppData path to your user profile directory
+if [ ! -d "$WINE_SAVE_DIR" ]; then
+    echo "setting up symlink"
+    mkdir -p "$WINE_SAVE_DIR"
+    rm -rf "$WINE_SAVE_DIR"
+
+    ln -s "$GAME_DIR/Data06" "$WINE_SAVE_DIR"
+else
+    echo "Symlink is set"
+fi
+
 echo "World $MAP_NAME found. Setting server to LOAD mode."
 echo "This can take a minute..."
 LAUNCH_ARGS="-batchmode -nographics -server load#${MAP_NAME}# servername#${SERVER_NAME}# isvisible#${IS_VISIBLE}# playercount#${PLAYER_COUNT}# serverport#${SERVER_PORT}# admin#-1# admin#-2# log#${LOG_LEVEL}# disablevideo#true#"
 # wine "$EXE_NAME" $LAUNCH_ARGS 2>$LOAD_LOG &
 # wine "$EXE_NAME" $LAUNCH_ARGS 2>/dev/null &
 echo "Runnig: $EXE_NAME $LAUNCH_ARGS"
-wine "$EXE_NAME" $LAUNCH_ARGS > /dev/null 2>&1 #&
+
+wine "$EXE_NAME" $LAUNCH_ARGS 2>&1 | while IFS= read -r line; do
+
+    # Check if the line contains "Player joined:" or "Player left:"
+    if [[ "$line" == *"Player joined:"* ]] || [[ "$line" == *"Player left:"* ]]; then
+        # Echo it cleanly to the console so AMP can parse it via your Regex filters
+        echo "$line"
+    fi
+
+    # Any line that DOES NOT match the IF statements above is automatically ignored.
+    # This keeps your console perfectly clean while feeding AMP exactly what it needs.
+done
 
 # Store the Wine process ID and wait on it natively
-# WINE_PID=$!
-# wait $WINE_PID
+WINE_PID=$!
+wait $WINE_PID
+
+exit 0
