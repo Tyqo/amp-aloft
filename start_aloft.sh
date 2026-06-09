@@ -212,7 +212,7 @@ wine "$EXE_NAME" $LAUNCH_ARGS 2>&1 | while IFS= read -r line; do
 	        echo "$line"
 	    fi
 
-	    if [[ "$line" == *"Room Code"* ]]; then
+	    if [[ "$line" == *"Server Ready"* ]]; then
 	        # Echo it cleanly to the console so AMP can parse it via your Regex filters
 	        echo "========================================================="
 	        echo "   [ALOFT JOIN CODE]: $line"
