@@ -21,8 +21,7 @@ Console.UserJoinRegex=^Player joined: (.*)$
 Console.UserLeaveRegex=^"Player left: (.*)"$
 
 # AMP passes arguments down into our execution script wrapper instead of directly to wine
-App.CommandLineArgs=
-# App.CommandLineArgs={{$FormattedArgs}}
+App.CommandLineArgs="{{$FormattedArgs}}"
 App.CommandLineParameterFormat=--{0} "{1}"
 App.CommandLineParameterDelimiter=
 
@@ -43,15 +42,13 @@ App.WorkingDir=1660080
 
 # Direct entrypoint configuration pointing to our automated wrapper script
 App.ExecutableLinux=/AMP/aloft/start_aloft.sh
-App.LinuxCommandLineArgs="{{$FormattedArgs}} --port {{$Ports.GamePort}}"
 
 # Referenced Files
 App.Ports=@IncludeJson[aloftports.json]
 App.UpdateSources=@IncludeJson[aloftupdates.json]
 
 # Environment Variables mapping down to the Docker container setup
-App.EnvironmentVariables={"LD_LIBRARY_PATH": "{{$FullBaseDir}}linux64:{{$FullRootDir}}linux64:%LD_LIBRARY_PATH%", "SteamAppId": "1660080", "WINEPREFIX": "{{$FullRootDir}}.wine", "WINEARCH": "win64", "WINEDEBUG": "-all,fixme-all", "DISPLAY": ":1", "UNITY_DISABLE_GRAPHICS": "1", "FORCE_AUDIO_VDMA": "1", "USER": "amp", "USERNAME": "amp", "LOGNAME": "amp"}
-
+App.EnvironmentVariables=
 Meta.ConfigManifest=aloftconfig.json
 Meta.MetaConfigManifest=aloftmetaconfig.json
 Meta.ConfigRoot=aloft.kvp
