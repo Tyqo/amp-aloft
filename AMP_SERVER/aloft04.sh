@@ -55,19 +55,18 @@ SERVER_PORT="0"
 # Game Modes: 0 = Survival, 1 = Creative, 2 = Custom
 ISLAND_COUNT="300"
 GAME_MODE="0"
-LOG_LEVEL="ERROR"
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         --servername) SERVER_NAME="$2"; shift ;;
-        --mapname) MAP_NAME="$2"; shift ;;
-        --islands) ISLAND_COUNT="$2"; shift ;;
-        --creative) GAME_MODE="$2"; shift ;;
-        --visible) IS_VISIBLE="$2"; shift ;;
-        --port) SERVER_PORT="$2"; shift ;;
-        --admin) ADMIN="$2"; shift ;;
-        # --log) LOG_LEVEL="$2"; shift ;;
-        --playercount) PLAYER_COUNT="$2"; shift ;;
+                --mapname) MAP_NAME="$2"; shift ;;
+                --islands) ISLAND_COUNT="$2"; shift ;;
+                --creative) GAME_MODE="$2"; shift ;;
+                --visible) IS_VISIBLE="$2"; shift ;;
+                --port) SERVER_PORT="$2"; shift ;;
+                --admin) ADMIN="$2"; shift ;;
+                --log) LOG_LEVEL="$2"; shift ;;
+                --playercount) PLAYER_COUNT="$2"; shift ;;
     esac
     shift
 done
@@ -128,8 +127,6 @@ shutdown_handler() {
     exit 0
 }
 
-trap shutdown_handler SIGINT SIGTERM
-
 # Initialize Wine prefix if it doesn't exist
 if [ ! -d "$WINEPREFIX" ]; then
     echo "Creating isolated 64-bit Wine prefix..."
@@ -160,7 +157,10 @@ if [ ! -d "$WINE_SAVE_DIR" ]; then
     echo "setting up symlink"
     mkdir -p "$WINE_SAVE_DIR"
 
-    ln -s "$WINE_SAVE_DIR" "Data06"
+    echo "$WINE_SAVE_DIR"
+    echo "$GAME_DIR/Data06/"
+
+    ln -s "$WINE_SAVE_DIR/" "Data06"
 else
     echo "Symlink is set"
 fi
@@ -193,22 +193,17 @@ echo "-----------------------------------------------"
 if [ ! -d "$SAVE_PATH" ]; then
     echo "World file not found at: $SAVE_PATH"
     echo "Initializing NEW world creation configuration..."
-    CREATE_ARGS="-batchmode -nographics -server create#${MAP_NAME}# islandcount#${ISLAND_COUNT}# corruptioncount#normal# creative#${GAME_MODE}# log#${LOG_LEVEL}# disablevideo#true#"
-    echo "This can take a minute or two..."
-    echo "Runnig: $EXE_NAME $CREATE_ARGS"
+    CREATE_ARGS="-batchmode -nographics -server  create#${MAP_NAME}# islandcount#${ISLAND_COUNT}# corruptioncount#normal# creative#${GAME_MODE}# log#ERROR# disablevideo#true#"
     wine "$EXE_NAME" $CREATE_ARGS &>$CREATE_LOG
     echo "Initializing NEW world creation configuration..."
-    sleep 5
 fi
 
 echo "World $MAP_NAME found. Setting server to LOAD mode."
 echo "This can take a minute..."
-LAUNCH_ARGS="-batchmode -nographics -server load#${MAP_NAME}# servername#${SERVER_NAME}# isvisible#${IS_VISIBLE}# playercount#${PLAYER_COUNT}# serverport#${SERVER_PORT}# admin#-1# admin#-2# log#${LOG_LEVEL}# disablevideo#true#"
-# wine "$EXE_NAME" $LAUNCH_ARGS 2>$LOAD_LOG &
-# wine "$EXE_NAME" $LAUNCH_ARGS 2>/dev/null &
-echo "Runnig: $EXE_NAME $LAUNCH_ARGS"
-wine "$EXE_NAME" $LAUNCH_ARGS > /dev/null 2>&1 #&
+LAUNCH_ARGS="-batchmode -nographics \
+        -server load#${MAP_NAME}# servername#${SERVER_NAME}# isvisible#${IS_VISIBLE}# playercount#${PLAYER_COUNT}# serverport#${SERVER_PORT}# admin#-1# admin#-2# log#WARNING# disablevideo#true#"
+wine "$EXE_NAME" $LAUNCH_ARGS 2>$LOAD_LOG &
 
 # Store the Wine process ID and wait on it natively
-# WINE_PID=$!
-# wait $WINE_PID
+WINE_PID=$!
+wait $WINE_PID
