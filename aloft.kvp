@@ -8,7 +8,7 @@ Meta.SpecificDockerImage=cubecoders/ampbase:wine
 Meta.DockerRequired=False
 Meta.ContainerPolicy=Supported
 Meta.DisplayImageSource=steam:1660080
-Meta.OS=3
+Meta.OS=Linux
 Meta.EndpointURIFormat=steam://connect/{ip}:{GenericModule.App.Ports.$GamePort}
 Meta.AppConfigId=255bfffe-3488-4022-8db8-60d1e2a47c2e
 

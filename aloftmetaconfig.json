@@ -1,16 +1,1 @@
-[
-	{
-		"ConsoleFilters": [
-			{
-				"Regex": "Player joined: (.*)",
-				"Action": "PlayerConnect",
-				"MatchGroup": 1
-			},
-			{
-				"Regex": "Player left: (.*)",
-				"Action": "PlayerDisconnect",
-				"MatchGroup": 1
-			}
-		]
-	}
-]
+[]

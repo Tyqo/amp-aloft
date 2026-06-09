@@ -125,23 +125,6 @@
         "EnumValues": {}
     },
     {
-        "DisplayName": "Log Level",
-        "Category": "Server Settings",
-        "Description": "ERROR",
-        "Keywords": "log,level",
-        "FieldName": "Log",
-        "InputType": "text",
-        "IsFlagArgument": false,
-        "ParamFieldName": "log",
-        "IncludeInCommandLine": true,
-        "DefaultValue": "ERROR",
-        "Placeholder": "ERROR",
-        "Suffix": "",
-        "Hidden": false,
-        "SkipIfEmpty": false,
-        "EnumValues": {}
-    },
-    {
         "DisplayName": "playercount",
         "Category": "Server Settings",
         "Description": "",

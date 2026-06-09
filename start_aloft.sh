@@ -55,7 +55,7 @@ SERVER_PORT="0"
 # Game Modes: 0 = Survival, 1 = Creative, 2 = Custom
 ISLAND_COUNT="300"
 GAME_MODE="0"
-LOAD_LOG="NONE"
+LOG_LEVEL="ERROR"
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
@@ -66,7 +66,7 @@ while [[ "$#" -gt 0 ]]; do
         --visible) IS_VISIBLE="$2"; shift ;;
         --port) SERVER_PORT="$2"; shift ;;
         --admin) ADMIN="$2"; shift ;;
-        --log) LOG_LEVEL="$2"; shift ;;
+        # --log) LOG_LEVEL="$2"; shift ;;
         --playercount) PLAYER_COUNT="$2"; shift ;;
     esac
     shift
@@ -160,10 +160,7 @@ if [ ! -d "$WINE_SAVE_DIR" ]; then
     echo "setting up symlink"
     mkdir -p "$WINE_SAVE_DIR"
 
-    echo "$WINE_SAVE_DIR"
-    echo "$GAME_DIR/Data06/"
-
-    ln -s "$WINE_SAVE_DIR/" "Data06"
+    ln -s "$WINE_SAVE_DIR" "Data06"
 else
     echo "Symlink is set"
 fi
@@ -197,6 +194,8 @@ if [ ! -d "$SAVE_PATH" ]; then
     echo "World file not found at: $SAVE_PATH"
     echo "Initializing NEW world creation configuration..."
     CREATE_ARGS="-batchmode -nographics -server  create#${MAP_NAME}# islandcount#${ISLAND_COUNT}# corruptioncount#normal# creative#${GAME_MODE}# log#${LOG_LEVEL}# disablevideo#true#"
+    echo "This can take a minute or two..."
+    echo "Runnig: $EXE_NAME $CREATE_ARGS"
     wine "$EXE_NAME" $CREATE_ARGS &>$CREATE_LOG
     echo "Initializing NEW world creation configuration..."
 fi
@@ -207,6 +206,7 @@ LAUNCH_ARGS="-batchmode -nographics \
         -server load#${MAP_NAME}# servername#${SERVER_NAME}# isvisible#${IS_VISIBLE}# playercount#${PLAYER_COUNT}# serverport#${SERVER_PORT}# admin#-1# admin#-2# log#${LOG_LEVEL}# disablevideo#true#"
 # wine "$EXE_NAME" $LAUNCH_ARGS 2>$LOAD_LOG &
 # wine "$EXE_NAME" $LAUNCH_ARGS 2>/dev/null &
+echo "Runnig: $EXE_NAME $LAUNCH_ARGS"
 wine "$EXE_NAME" $LAUNCH_ARGS > /dev/null 2>&1 #&
 
 # Store the Wine process ID and wait on it natively
